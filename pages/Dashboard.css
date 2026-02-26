@@ -1,0 +1,363 @@
+/* ============================================================
+   DASHBOARD  (db-*)  —  SafeZone AI
+   ============================================================ */
+
+.db-page {
+    background: linear-gradient(160deg, #020617 0%, #0f172a 50%, #1e293b 100%);
+    min-height: 100vh;
+    font-family: "Segoe UI", "Roboto", sans-serif;
+    color: #f1f5f9;
+}
+
+/* ── Header ── */
+.db-header {
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(15, 23, 42, 0) 100%);
+    border-bottom: 1px solid rgba(6, 182, 212, 0.15);
+    padding: 2rem 2.5rem 1.75rem;
+}
+
+.db-header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.db-title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin: 0 0 0.3rem;
+    background: linear-gradient(135deg, #f1f5f9, #06b6d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.db-subtitle {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.db-cta-btn {
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.65rem 1.4rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(6, 182, 212, 0.25);
+    white-space: nowrap;
+}
+
+.db-cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(6, 182, 212, 0.45);
+}
+
+/* ── Body ── */
+.db-body {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 2.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+/* ── Stat Cards ── */
+.db-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+}
+
+.db-stat-card {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(6, 182, 212, 0.12);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.db-stat-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(6, 182, 212, 0.28);
+}
+
+.db-stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.db-stat-value {
+    font-size: 2.2rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 0.2rem;
+}
+
+.db-stat-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #f1f5f9;
+}
+
+.db-stat-sub {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 0.15rem;
+}
+
+/* ── Card ── */
+.db-card {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(6, 182, 212, 0.12);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+.db-card--flex {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.db-card--scroll {
+    overflow: hidden;
+}
+
+.db-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.db-card-title {
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: 0.2rem;
+}
+
+.db-card-sub {
+    font-size: 0.78rem;
+    color: #64748b;
+}
+
+.db-legend-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    flex-shrink: 0;
+}
+
+.db-legend-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+/* ── Charts row ── */
+.db-charts-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+
+/* ── Bottom row ── */
+.db-bottom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+
+/* ── Search list ── */
+.db-search-list {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.db-search-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border: 1px solid transparent;
+}
+
+.db-search-item:hover {
+    background: rgba(6, 182, 212, 0.07);
+    border-color: rgba(6, 182, 212, 0.2);
+}
+
+.db-search-pin {
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.db-search-name {
+    flex: 1;
+    font-size: 0.88rem;
+    font-weight: 500;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.db-search-date {
+    font-size: 0.72rem;
+    color: #64748b;
+    flex-shrink: 0;
+}
+
+.db-empty {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: #64748b;
+    font-size: 0.88rem;
+}
+
+.db-empty-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+/* ── Summary rows ── */
+.db-summary-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+}
+
+.db-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0.75rem;
+    background: rgba(6, 182, 212, 0.04);
+    border: 1px solid rgba(6, 182, 212, 0.08);
+    border-radius: 8px;
+    font-size: 0.86rem;
+}
+
+.db-summary-label {
+    color: #94a3b8;
+}
+
+.db-summary-val {
+    font-weight: 800;
+    font-size: 1rem;
+}
+
+/* ── Risk meter ── */
+.db-risk-meter {
+    margin-bottom: 1.5rem;
+}
+
+.db-risk-meter-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: #94a3b8;
+    margin-bottom: 0.5rem;
+}
+
+.db-risk-meter-track {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.db-risk-meter-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 1s ease;
+}
+
+.db-risk-meter-pct {
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-top: 0.35rem;
+    text-align: right;
+}
+
+/* ── Emergency button ── */
+.db-emergency-btn {
+    width: 100%;
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.25);
+    border-radius: 10px;
+    color: #06b6d4;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.db-emergency-btn:hover {
+    background: rgba(6, 182, 212, 0.2);
+    box-shadow: 0 4px 14px rgba(6, 182, 212, 0.2);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+    .db-stat-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .db-charts-row {
+        grid-template-columns: 1fr;
+    }
+
+    .db-bottom-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .db-stat-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .db-body {
+        padding: 1.25rem 1rem 2rem;
+    }
+
+    .db-header {
+        padding: 1.25rem 1rem;
+    }
+
+    .db-header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
