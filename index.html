@@ -1,0 +1,301 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>AI Smart Safety Intelligence System</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: white;
+        }
+
+        header {
+            background: #111827;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 12px;
+            width: 22%;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .main {
+            display: flex;
+            height: 60vh;
+        }
+
+        #map {
+            flex: 7;
+        }
+
+        #sidePanel {
+            flex: 3;
+            background: #111827;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        button {
+            padding: 8px;
+            margin: 5px 0;
+            width: 100%;
+            background: #ef4444;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #dc2626;
+        }
+
+        #analytics {
+            padding: 20px;
+            background: #1e293b;
+        }
+
+        footer {
+            background: #111827;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .station {
+            background: #1e293b;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>🚨 AI Smart Safety Intelligence System</header>
+
+<div class="cards">
+    <div class="card">
+        <h3>📍 Selected Area</h3>
+        <div id="areaName">Not Selected</div>
+    </div>
+
+    <div class="card">
+        <h3>⚠ Risk Score</h3>
+        <div id="riskScore">--</div>
+    </div>
+
+    <div class="card">
+        <h3>🚔 Police Count</h3>
+        <div id="policeCount">0</div>
+    </div>
+
+    <div class="card">
+        <h3>📊 Trend</h3>
+        <div id="trendStatus">Stable</div>
+    </div>
+</div>
+
+<div class="main">
+    <div id="map"></div>
+
+    <div id="sidePanel">
+        <h3>Live Safety Panel</h3>
+        <button onclick="showPoliceStations()">👮 Show Nearby Police</button>
+        <button onclick="toggleWomenMode()">👩 Women Safety Mode</button>
+        <button onclick="emergencyMode()">🚨 Emergency</button>
+
+        <div id="policeList"></div>
+    </div>
+</div>
+
+<div id="analytics">
+    <h3>Crime Trend Analytics</h3>
+    <canvas id="crimeChart"></canvas>
+</div>
+
+<footer>
+    Developed by Gowshika R.S | AI-Based Unsafe Area Prediction System
+</footer>
+
+<script>
+
+    var map = L.map('map').setView([13.0827, 80.2707], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    var marker;
+    var womenMode = false;
+    var policeMarkers = [];
+
+    function calculateRisk(lat, lng) {
+        let score = Math.abs(Math.sin(lat) * Math.cos(lng) * 100);
+        if (womenMode) score += 15;
+        return Math.min(score.toFixed(0), 100);
+    }
+
+    map.on('click', function(e) {
+
+        if (marker) map.removeLayer(marker);
+
+        marker = L.marker(e.latlng).addTo(map);
+
+        let risk = calculateRisk(e.latlng.lat, e.latlng.lng);
+
+        document.getElementById("riskScore").innerText = risk;
+        document.getElementById("areaName").innerText =
+            "Lat: " + e.latlng.lat.toFixed(3) +
+            ", Lng: " + e.latlng.lng.toFixed(3);
+
+        generateTrend();
+    });
+
+    function toggleWomenMode() {
+        womenMode = !womenMode;
+        alert("Women Safety Mode: " + (womenMode ? "ON" : "OFF"));
+    }
+
+    function emergencyMode() {
+        alert("Emergency Mode Activated!\nShowing nearest police stations.");
+        showPoliceStations();
+    }
+
+    function showPoliceStations() {
+
+        if (!marker) {
+            alert("Select location first.");
+            return;
+        }
+
+        policeMarkers.forEach(m => map.removeLayer(m));
+        policeMarkers = [];
+        document.getElementById("policeList").innerHTML = "";
+
+        let center = marker.getLatLng();
+        let radius = 3000;
+
+        let query = `
+            [out:json];
+            node["amenity"="police"](around:${radius},${center.lat},${center.lng});
+            out;
+        `;
+
+        fetch("https://overpass-api.de/api/interpreter", {
+            method: "POST",
+            body: query
+        })
+        .then(res => res.json())
+        .then(data => {
+
+            document.getElementById("policeCount").innerText = data.elements.length;
+
+            data.elements.forEach(station => {
+
+                let m = L.marker([station.lat, station.lon])
+                    .addTo(map)
+                    .bindPopup(station.tags.name || "Police Station");
+
+                policeMarkers.push(m);
+
+                document.getElementById("policeList").innerHTML += `
+                    <div class="station">
+                        ${station.tags.name || "Police Station"}
+                    </div>
+                `;
+            });
+
+        });
+    }
+
+    function generateTrend() {
+
+        let ctx = document.getElementById("crimeChart").getContext("2d");
+
+        new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: ["Jan","Feb","Mar","Apr","May","Jun"],
+                datasets: [{
+                    label: "Crime Index",
+                    data: [
+                        Math.random()*100,
+                        Math.random()*100,
+                        Math.random()*100,
+                        Math.random()*100,
+                        Math.random()*100,
+                        Math.random()*100
+                    ],
+                    borderColor: "red",
+                    fill: false
+                }]
+            }
+        });
+
+        let trends = ["Rising", "Stable", "Decreasing"];
+        document.getElementById("trendStatus").innerText =
+            trends[Math.floor(Math.random()*3)];
+    }
+
+</script>
+
+</body>
+</html> -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SafeZone AI Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>SafeZone AI</h2>
+    <a href="index.html">Dashboard</a>
+    <a href="map.html">Unsafe Areas Map</a>
+</div>
+
+<div class="main">
+    <h1>📊 Safety Trend Dashboard</h1>
+
+    <div class="card">
+        <canvas id="trendChart"></canvas>
+    </div>
+
+    <div class="voice-box">
+        <h3>🎙 Voice Assistant</h3>
+        <button onclick="startVoice()">Start Speaking</button>
+        <p id="voiceOutput"></p>
+    </div>
+</div>
+<script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
